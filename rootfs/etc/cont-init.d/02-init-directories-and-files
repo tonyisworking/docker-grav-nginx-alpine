@@ -25,15 +25,3 @@ touch /var/log/php/error.log
 # Give  user access to all log files
 chown -R "$WEB_USER":"$WEB_GROUP" /var/log/
 
-# install CMS if optioned
-if [ "${INSTALL_CMS}" = "true" ]; then 
-
-if [ "${CMS_GZIP_URL}" = "" ]; then 
-   composer create-project $COMPOSER_PROJECT "$WEB_ROOT"
-else
-  curl -o cms.tar.gz -SL "$CMS_GZIP_URL"
-  tar -xzf cms.tar.gz -C "$WEB_ROOT"
-fi
-  chown -R "$WEB_USER":"$WEB_GROUP" "$WEB_ROOT"
-
-fi 

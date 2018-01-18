@@ -94,12 +94,11 @@ ENV TERM="xterm" \
     PORT="80" \
     CRONLOCK_HOST="" \
     BUILD_ENV="prod" \
-    INSTALL_CMS="true" \
-    CMS_GZIP_URL="" \
     COMPOSER_PROJECT="getgrav/grav" \
     WEB_ROOT="/var/www/grav/" \
     WEB_USER="grav" \
     WEB_GROUP="web" \
+    INSTALL_CMS="false" \
     NGINX_INCLUDE_DIR="/var/www/nginx" \
     NGINX_MAX_BODY_SIZE="64M" \
     NGINX_FASTCGI_TIMEOUT="30" \
@@ -108,6 +107,9 @@ ENV TERM="xterm" \
     TZ="UTC"
 
 RUN mkdir ${WEB_ROOT}
+RUN composer create-project ${COMPOSER_PROJECT} ${WEB_ROOT}
+RUN mkdir /home/grav
+RUN cp -rf ${WEB_ROOT} /home/
 
 WORKDIR ${WEB_ROOT}
 EXPOSE ${PORT}
