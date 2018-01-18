@@ -1,0 +1,56 @@
+#!/usr/bin/with-contenv bash
+
+# if production mode enable opcache
+if [ "${BUILD_ENV}" = "prod" ]; then
+echo -e "; Don't display errors in production \n\
+display_errors = Off \n\
+; Enable php opcache to make site faster \n\
+[opcache] \n\
+opcache.enable = 1 \n\
+opcache.enable_cli = 1 \n\
+opcache.fast_shutdown = 1 \n\
+opcache.memory_consumption = 128 \n\
+; Log opcache warnings \n\
+opcache.log_verbosity_level = 2 \n\
+opcache.error_log = /proc/self/fd/2 \n\
+opcache.interned_strings_buffer = 8 \n\
+opcache.max_accelerated_files = 4000 \n\
+opcache.revalidate_freq = 31556926"   >> /etc/php7/php-fpm.ini; 
+else 
+echo -e "; Don't display errors in production \n\
+display_errors = On \n\
+[opcache] \n\
+opcache.enable = 0 \n\
+opcache.revalidate_freq = 1"  >> /etc/php7/php-fpm.ini
+fi
+
+
+
+# Setup sessions
+echo "; This file contains php session backend (default: files)" > /etc/php7/conf.d/sessions.ini
+
+if [ "$PHP_SESSION_HANDLER" == "redis" ]; then
+  echo "session.save_handler = redis" >> /etc/php7/conf.d/sessions.ini
+
+  redis_resource_string="$WP_REDIS_SCHEME://"
+
+  # Use different setup in dev/prod
+  if [ "$WP_REDIS_HOST" != "" ]; then
+    redis_resource_string+="$WP_REDIS_HOST:$WP_REDIS_PORT"
+  elif [ "$REDIS_PORT_6379_TCP_ADDR" != "" ]; then
+    redis_resource_string+="$REDIS_PORT_6379_TCP_ADDR:$WP_REDIS_PORT"
+  fi
+
+  # Use password or different database when user provides them
+  redis_resource_string+="?database=$PHP_SESSION_REDIS_DB"
+
+  if [ "$WP_REDIS_PASSWORD" != "" ]; then
+    redis_resource_string+="&auth=$WP_REDIS_PASSWORD"
+  fi
+
+  echo "session.save_path = \"$redis_resource_string\"" >> /etc/php7/conf.d/sessions.ini
+
+else # Use normal file based sessions if redis is not configured
+  echo "session.save_handler = files" >> /etc/php7/conf.d/sessions.ini
+  echo "session.save_path = /tmp" >> /etc/php7/conf.d/sessions.ini
+fi

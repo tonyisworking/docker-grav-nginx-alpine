@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv bash
+
+curl -o ${WEB_ROOT}404.html -SL "https://raw.githubusercontent.com/h5bp/html5-boilerplate/master/dist/404.html"

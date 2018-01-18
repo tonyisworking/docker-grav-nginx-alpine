@@ -1,0 +1,39 @@
+#!/usr/bin/with-contenv bash
+
+# Create dir for nginx tmp files
+if [ ! -d /tmp/nginx/body ] ; then
+  mkdir -p /tmp/nginx/body
+fi
+
+chown "$WEB_USER":"$WEB_GROUP" /tmp/nginx
+chown "$WEB_USER":"$WEB_GROUP" /tmp/nginx/body
+
+# Create log directories if they don't exist already
+if [ ! -d /var/log/nginx ] ; then
+  mkdir -p /var/log/nginx
+fi
+if [ ! -d /var/log/php ] ; then
+  mkdir -p /var/log/php
+fi
+if [ ! -d /var/log/mail ] ; then
+  mkdir -p /var/log/mail
+fi
+
+# Create log directory for php
+touch /var/log/php/error.log
+
+# Give  user access to all log files
+chown -R "$WEB_USER":"$WEB_GROUP" /var/log/
+
+# install CMS if optioned
+if [ "${INSTALL_CMS}" = "true" ]; then 
+
+if [ "${CMS_GZIP_URL}" = "" ]; then 
+   composer create-project $COMPOSER_PROJECT "$WEB_ROOT"
+else
+  curl -o cms.tar.gz -SL "$CMS_GZIP_URL"
+  tar -xzf cms.tar.gz -C "$WEB_ROOT"
+fi
+  chown -R "$WEB_USER":"$WEB_GROUP" "$WEB_ROOT"
+
+fi 
