@@ -14,11 +14,15 @@ If you want to mount your own grav installation feel free to do so by overriding
 
 If you want to load your own `user` folder, then mount your files into `/var/www/grav/user`. An example of this is in the sample docker compose file.
 
-If the container is loaded with `INSTALL_CMS=true` then grav will be re-installed upon initialization into the web root folder. Useful if you externally mounted a directory at that location. 
+The container is set to run `bin/grav update` and `bin/grav install` on every initialization so it should keep itself updated
+
+If the container is loaded with environment  `INSTALL_CMS=true` then grav will be re-installed upon initialization into the web root folder. Useful if you need to reinstall to an empty directory. 
 
 You can turn on php opcache with `BUILD_ENV=prod`
 
 I've also loaded a copy of the [html5boilerplate](https://html5boilerplate.com/) 404 page as the 404 page for nginx. 
+
+To run `grav` cli commands just exec into the container with `docker exec -ti {container_name} /bin/bash` then you can `bin/gpm` or `bin/grav` all you want.
 
 ## Docker-Compose Sample
 
@@ -66,6 +70,7 @@ services:
 - composer
 - nginx
 - alpine
+- s6-overlay
 
 ## License
 [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)
