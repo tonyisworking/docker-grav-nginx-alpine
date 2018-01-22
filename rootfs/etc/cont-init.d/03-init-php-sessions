@@ -17,7 +17,7 @@ opcache.interned_strings_buffer = 8 \n\
 opcache.max_accelerated_files = 4000 \n\
 opcache.revalidate_freq = 31556926"   >> /etc/php7/php-fpm.ini; 
 else 
-echo -e "; Don't display errors in production \n\
+echo -e "; Display errors in Dev \n\
 display_errors = On \n\
 [opcache] \n\
 opcache.enable = 0 \n\
