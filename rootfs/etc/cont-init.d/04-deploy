@@ -5,7 +5,7 @@ rm -rf ${WEB_ROOT}user/*;
 rm -rf ${WEB_ROOT}user/.*;  
 
 # Setup Bitbucket and Github to known hosts
-mkdir /.ssh ;
+mkdir ~/.ssh ;
 ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts ;
 ssh-keyscan github.com >> ~/.ssh/known_hosts;
 
