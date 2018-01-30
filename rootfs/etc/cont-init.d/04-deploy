@@ -6,8 +6,8 @@ rm -rf ${WEB_ROOT}user/.*;
 
 # Setup Bitbucket and Github to known hosts
 mkdir /.ssh ;
-ssh-keyscan bitbucket.org >> /.ssh/known_hosts ;
-ssh-keyscan github.com >> /.ssh/known_hosts;
+ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts ;
+ssh-keyscan github.com >> ~/.ssh/known_hosts;
 
 chmod 500 /home/id_key;
 # id_key must be directory mounted first!!!!
