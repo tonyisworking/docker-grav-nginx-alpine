@@ -1,0 +1,18 @@
+#!/usr/bin/with-contenv bash
+if [ "${DEPLOY_GIT}" = "true" ]; then 
+
+rm -rf ${WEB_ROOT}user/*;
+rm -rf ${WEB_ROOT}user/.*;  
+
+# Setup Bitbucket and Github to known hosts
+mkdir /root/.ssh ;
+ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts ;
+ssh-keyscan github.com >> ~/.ssh/known_hosts;
+
+# id_key must be directory mounted first!!!!
+ssh-agent sh -c 'ssh-add /home/id_key; git clone ${GIT_URL} ${WEB_ROOT}user';
+
+cd ${WEB_ROOT}user; git checkout ${GIT_BRANCH};
+chown -R "$WEB_USER":"$WEB_GROUP" "$WEB_ROOT";
+
+fi

@@ -103,6 +103,9 @@ ENV TERM="xterm" \
     NGINX_MAX_BODY_SIZE="64M" \
     NGINX_FASTCGI_TIMEOUT="30" \
     PHP_MEMORY_LIMIT="256M" \
+    DEPLOY_GIT="false" \
+    GIT_URL="" \
+    GIT_BRANCH="master" \
     SMTP_HOST="127.0.0.1" \
     TZ="UTC"
 
