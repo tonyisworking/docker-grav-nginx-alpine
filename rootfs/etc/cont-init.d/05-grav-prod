@@ -1,19 +1,19 @@
 #!/usr/bin/with-contenv bash
 
 # install CMS if optioned
-if [ "${INSTALL_CMS}" = "true" ]; then 
-   cp -rf /home/grav/* ${WEB_ROOT};  
+if [ "${INSTALL_CMS}" = "true" ]; then
+   cp -rf /home/grav/* ${WEB_ROOT};
 fi
 
 ${WEB_ROOT}bin/gpm update
 ${WEB_ROOT}bin/gpm selfupgrade
 ${WEB_ROOT}bin/grav install
 ${WEB_ROOT}bin/grav composer
-${WEB_ROOT}bin/grav clear-cache
+${WEB_ROOT}bin/grav cache
 
 # if production mode
 if [ "${BUILD_ENV}" = "prod" ]; then
-   ${WEB_ROOT}bin/grav clean   
+   ${WEB_ROOT}bin/grav clean
 fi
 
 # Make sure web root is owned by web user and group
